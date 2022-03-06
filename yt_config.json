@@ -1,0 +1,21 @@
+{
+  "channels": [
+    "https://www.youtube.com/c/10HoursMovies"
+  ],
+  "playlists": [
+
+  ],
+  "videos": [
+    "https://www.youtube.com/watch?v=UcRtFYAz2Yo&t=1646s",
+    "https://www.youtube.com/watch?v=-50NdPawLVY"
+  ],
+  "music": [
+    "https://www.youtube.com/watch?v=UcRtFYAz2Yo&t=1646s"
+  ],
+  "_format": {
+    "content_type": [
+        "https://www.youtube.com/content_url",
+        "D:\directory_name"
+      ]
+  }
+}
