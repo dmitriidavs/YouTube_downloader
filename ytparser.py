@@ -30,11 +30,11 @@ def custom_hook(d):
     if d['status'] == 'finished':
         print('\nDone downloading, next video ...')
 
-with open('yt_config.json', encoding = 'utf-8') as file:
-    yt_content_dict = json.load(file)
-    yt_content_dict.popitem()
-
 try:
+    with open('yt_config.json', encoding = 'utf-8') as file:
+        yt_content_dict = json.load(file)
+        yt_content_dict.popitem()
+
     for content_key in yt_content_dict:
         if content_key in ["channels", "playlists", "videos"]:
             content_dict = yt_content_dict[content_key]
