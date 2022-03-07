@@ -1,2 +1,10 @@
 *.pyc
 *.jpg
+*.zip
+*.toc
+*.pkg
+*.txt
+*.spec
+*.manifest
+*.pyz
+*.html
