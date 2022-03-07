@@ -1,19 +1,19 @@
 {
-  "каналы": {
+  "channels": {
     "content_by_name": {
       "10HoursMovies_все_видео": ["https://www.youtube.com/c/10HoursMovies", 69],
       "10HoursMovies_отсортированный": ["https://www.youtube.com/c/10HoursMovies/videos?view=0&sort=p&flow=grid", 2]
     },
     "config": ["D:\\USSR_ready\\NotRuTube\\channels", "best"]
   },
-  "плейлисты": {
+  "playlists": {
     "content_by_name": {
       "Лучшее 1": ["https://www.youtube.com/playlist?list=PLFk-EwUG0agYlsR2gFjmqAL9kdko40Ooz", 69],
       "Лучшее 2": ["https://www.youtube.com/playlist?list=PL_VX-T4C3Njp9BHiSDvIGTeVDbHA-CmvN", 10]
     },
     "config": ["D:\\USSR_ready\\NotRuTube\\playlists", 1080]
   },
-  "видео": {
+  "videos": {
     "content_by_name": [
       "https://www.youtube.com/watch?v=UcRtFYAz2Yo&t=478s",
       "https://www.youtube.com/watch?v=UcRtFYAz2Yo&t=478s",
@@ -32,9 +32,9 @@
     ],
     "config": ["D:\\USSR_ready\\NotRuTube\\videos", 1080]
   },
-  "аудио":{
+  "audio":[
     "-_-"
-  },
+  ],
   "_format": {
     "content_type": [
       ["https://www.youtube.com/content_url_1", "кол-во видео для загрузки, <69> - выгрузить все видео плейлиста/канала"],
