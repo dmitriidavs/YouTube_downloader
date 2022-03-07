@@ -8,4 +8,4 @@
 5. При необходимости открываете доступ к диску для создания файлов
 6. (вирусов нет)
 
-![alt text](https://github.com/dmitriidavs/YouTube_downloader/[master]/mb_later.jpg?raw=true)
+![alt text](https://github.com/dmitriidavs/YouTube_downloader/master/mb_later.jpg?raw=true)
