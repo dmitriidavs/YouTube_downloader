@@ -1,69 +1,103 @@
-import requests
 import json
-from bs4 import BeautifulSoup
+from yt_dlp import YoutubeDL
+import os
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
-channel_url = 'https://www.youtube.com/c/3blue1brown'
-base_url = 'https://www.youtube.com'
+def best_format_selector(ctx):
+    formats = ctx.get('formats')[::-1]
+    best_video = next(f for f in formats if f['vcodec'] != 'none' and f['acodec'] == 'none')
+    audio_ext = {'mp4': 'm4a', 'webm': 'webm'}[best_video['ext']]
+    best_audio = next(f for f in formats if (f['acodec'] != 'none' and f['vcodec'] == 'none' and f['ext'] == audio_ext))
+    yield {
+        'format_id': f'{best_video["format_id"]} + {best_audio["format_id"]}',
+        'ext': best_video['ext'],
+        'requested_formats': [best_video, best_audio],
+        'protocol': f'{best_video["protocol"]} + {best_audio["protocol"]}'
+    }
 
-# response = requests.get(url)
-# soup = BeautifulSoup(response.text, 'lxml')
-#
-# print(soup.prettify())
+def custom_hook(d):
+    if d['status'] == 'finished':
+        print('\nDone downloading, next video ...')
 
-# for a in soup.find_all('a', href = True):
-#     print("Found URL:", a['href'])
+with open('yt_config1.json', encoding = 'utf-8') as file:
+    yt_content_dict = json.load(file)
+    yt_content_dict.popitem()
 
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.select import Select
-from selenium.webdriver.common.action_chains import ActionChains
-import time
+for content_key in yt_content_dict:
+    if content_key in ["channels", "playlists", "videos"]:
+        content_dict = yt_content_dict[content_key]
+        CONTENT_list = content_dict["content_by_name"]
+        CONTENT_dir = content_dict["config"][0]
+        CONTENT_res = content_dict["config"][1]
+    else:
+        print(f'Unsupported Content Type: {bcolors.FAIL}{content_key}{bcolors.ENDC}')
+        continue
 
-envoke_browser = False
-while envoke_browser == False:
-    try:
-        chrome_options = webdriver.ChromeOptions()
-        # chrome_options.add_argument('--headless')
-        chrome_options.add_argument('--no-sandbox')
-        chrome_options.add_argument('--disable-dev-shm-usage')
-        chrome_options.page_load_strategy = 'none'
-        driver = webdriver.Chrome('chromedriver', options=chrome_options)
-        driver.maximize_window()
-        envoke_browser = True
-        print('Driver envoked')
-    except:
-        print('FAILED to load webdriver, restarting...')
+    if CONTENT_res == "best":
+        CONTENT_res = best_format_selector
+    else:
+        CONTENT_res = f'[height <= {CONTENT_res}]'
 
-driver.get(url)
-time.sleep(2)
+    if content_key in ["channels", "playlists"]:
+        for key, value in CONTENT_list.items():
+            current_dir = os.path.join(CONTENT_dir, key)
+            if not os.path.exists(current_dir):
+                os.makedirs(current_dir)
 
-soup = BeautifulSoup(driver.page_source, 'lxml')
-video_divs = soup.find_all("div", {"id": "dismissible"})
+            print(f'\nDownloading {content_key}: {bcolors.OKGREEN}{key}{bcolors.ENDC}')
+            if value[1] != 69:
+                ydl_opts = {
+                    "format": CONTENT_res,
+                    'progress_hooks': [custom_hook],
+                    'outtmpl': f'{current_dir}/%(title)s.%(ext)s',
+                    'max_downloads': value[1]
+                }
+            else:
+                ydl_opts = {
+                    "format": CONTENT_res,
+                    'progress_hooks': [custom_hook],
+                    'outtmpl': f'{current_dir}/%(title)s.%(ext)s'
+                }
 
-print(len(video_divs))
+            try:
+                with YoutubeDL(ydl_opts) as ydl:
+                    ydl.cache.remove()
+                    ydl.download([value[0]])
+            except KeyboardInterrupt:
+                break
+            except:
+                print(f'Download Error: {value[0]}, next video ...')
 
-video_list = []
+    elif content_key == 'videos':
+        for video_url in CONTENT_list:
+            if not os.path.exists(CONTENT_dir):
+                os.makedirs(CONTENT_dir)
 
-for el in video_divs:
-    for a in el.find_all('a', href = True):
-        video_list.append(a['href'])
+            print(f'\nDownloading {content_key}: {bcolors.OKGREEN}{video_url}{bcolors.ENDC}')
+            ydl_opts = {
+                "format": CONTENT_res,
+                'progress_hooks': [custom_hook],
+                'outtmpl': f'{CONTENT_dir}/%(title)s.%(ext)s'
+            }
+            try:
+                with YoutubeDL(ydl_opts) as ydl:
+                    ydl.cache.remove()
+                    ydl.download([video_url])
+            except KeyboardInterrupt:
+                break
+            except:
+                print(f'Download Error: {value[0]}, next video ...')
 
-for v_part_url in video_list:
-    video_url_full = base_url + v_part_url
-    driver.get(video_url_full)
-    soup = BeautifulSoup(driver.page_source, 'lxml')
-    # print(soup.prettify())
-    time.sleep(2)
-
-    for a in soup.find("div", {"id": "player"}).find_all('a', href = True):
-        print(a['href'])
-
-    # print(el.find("div", {"id": "player"}))
-    time.sleep(500)
-
-    # break
+"""
+    если не хватит места - сами виноваты ;-)
+"""
