@@ -14,4 +14,6 @@
 Пример работы:
 ![alt text](https://github.com/dmitriidavs/YouTube_downloader/blob/master/pow1.png?raw=true)
 ![alt text](https://github.com/dmitriidavs/YouTube_downloader/blob/master/pow2.png?raw=true)
+
+Так чисто:
 ![alt text](https://github.com/dmitriidavs/YouTube_downloader/blob/master/mb_later.jpg?raw=true)
