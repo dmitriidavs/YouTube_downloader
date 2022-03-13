@@ -30,10 +30,15 @@ def custom_hook(d):
     if d['status'] == 'finished':
         print('\nDone downloading, next video ...')
 
-try:
-    with open('yt_config.json', encoding = 'utf-8') as file:
-        yt_content_dict = json.load(file)
-        yt_content_dict.popitem()
+def main():
+    try:
+        with open('yt_config.json', encoding = 'utf-8') as file:
+            yt_content_dict = json.load(file)
+            yt_content_dict.popitem()
+    except Exception as e:
+        print(str(e))
+        time.sleep(10)
+        return
 
     for content_key in yt_content_dict:
         if content_key in ["channels", "playlists", "videos"]:
@@ -99,9 +104,9 @@ try:
                     break
                 except:
                     print(f'Download Error: {value[0]}, next video ...')
-except Exception as e:
-    print(str(e))
-    time.sleep(10)
+
+if __name__ == '__main__':
+    main()
 
 """
     если не хватит места - сами виноваты ;-)
